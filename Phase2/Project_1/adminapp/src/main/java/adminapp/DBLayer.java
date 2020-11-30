@@ -64,6 +64,13 @@ public class DBLayer {
     	String query;
     	int result;
     	
+    	//check if the statement was obtained
+    	if (stmt == null) {
+    		resultMessage = "A connection has not been properly establisged with the database. Please check your database.";
+    		return;
+    	}
+    		
+    	
     	//it is mandatory to choose a class for a student
     	if (table.equals("students") && classId.equals("0")) {
     		resultMessage = "Please choose a class for a student. A student can't be added without a class!";
@@ -106,6 +113,12 @@ public class DBLayer {
     	String query;
     	int result;
     	ResultSet rs;
+
+    	//check if the statement was obtained
+    	if (stmt == null) {
+    		resultMessage = "A connection has not been properly establisged with the database. Please check your database.";
+    		return;
+    	}
     	
     	//it is mandatory to choose a class for a student
     	if (teacherId.equals("0") || classId.equals("0") || subjectId.equals("0")) {
@@ -147,6 +160,12 @@ public class DBLayer {
     	Map<Integer, String> r = new LinkedHashMap<>();
     	String query;
     	ResultSet rs;
+
+    	//check if the statement was obtained
+    	if (stmt == null) {
+    		resultMessage = "A connection has not been properly establisged with the database. Please check your database.";
+    		return r;
+    	}
     	
     	query = "select * from "+tableName+" order by "+actions.get(tableName)[0];
     	
@@ -171,6 +190,12 @@ public class DBLayer {
     	
     	String query;
     	ResultSet rs;
+
+    	//check if the statement was obtained
+    	if (stmt == null) {
+    		resultMessage = "A connection has not been properly establisged with the database. Please check your database.";
+    		return r;
+    	}
     	
     	query = "select t.teacherName, s.subjName from teacherclasssubj tcs, classes c, teachers t, subjects s where tcs.classId = c.classId and tcs.subjId = s.subjId and tcs.teacherId = t.teacherId and c.classId = "+classId+ " order by t.teacherName, s.subjName";
     	
@@ -184,6 +209,36 @@ public class DBLayer {
 			
 		} catch (SQLException e) {
 			resultMessage = "Error while trying to fetch the list of rows from the table teacherclasssubj: "+e.getMessage();
+		}
+    	
+    	return r;
+    }
+    
+    	public static Map<Integer, String> getStudentsListByClass(Integer classId){
+    	
+    	Map<Integer, String> r = new LinkedHashMap<>();
+    	
+    	String query;
+    	ResultSet rs;
+
+    	//check if the statement was obtained
+    	if (stmt == null) {
+    		resultMessage = "A connection has not been properly establisged with the database. Please check your database.";
+    		return r;
+    	}
+    	
+    	query = "select stdId, stdName from students where stdClassId  = "+classId+ " order by stdId";
+    	
+    	try {
+    		rs = stmt.executeQuery(query);
+    		
+			while(rs.next()) 
+				r.put(rs.getInt(1), rs.getString(2));
+			
+			rs.close();
+			
+		} catch (SQLException e) {
+			resultMessage = "Error while trying to fetch the list of rows from the table students: "+e.getMessage();
 		}
     	
     	return r;

@@ -32,7 +32,7 @@
 						for (Map.Entry<String, String> ts : DBLayer.getTeacherSubjectsListByClass(e.getKey()).entrySet())
 							out.println(ts.getKey()+" : "+ts.getValue()+"<br>");						
 						out.println("</td><td>");
-						for(Map.Entry<Integer, String> s : DBLayer.getListByTable("students").entrySet())
+						for(Map.Entry<Integer, String> s : DBLayer.getStudentsListByClass(e.getKey()).entrySet())
 							out.println(s.getKey()+" : "+s.getValue()+"<br>");													
 						out.println("</td></tr>");
 						
